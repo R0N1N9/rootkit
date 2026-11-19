@@ -214,17 +214,20 @@ button{font-family:inherit;color:inherit;cursor:pointer}
 .tmeta{flex:1;min-width:0}
 .tmeta .tl{font-family:var(--mono);font-size:10px;letter-spacing:1.5px;color:var(--faint);text-transform:uppercase}
 .tmeta .tv{font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-#tRole.red{color:var(--acc)} #tRole.blue{color:var(--acc2)} #tRole.intel{color:var(--root)}
+/* track colours: red team red, blue team blue, intel green, CI purple, AI yellow */
+.trk-red{--tc:var(--bad)} .trk-blue{--tc:var(--acc2)} .trk-green{--tc:var(--acc)} .trk-purple{--tc:var(--root)} .trk-yellow{--tc:var(--warn)}
+.mode.trk .ic{color:var(--tc);border-color:var(--tc)} .mode.trk:hover,.mode.trk:focus-visible{border-color:var(--tc)}
+#tRole{color:var(--tc,var(--acc))}
 .tprog{display:flex;align-items:center;gap:9px;padding:6px 14px;border-bottom:1px solid var(--line);background:var(--panel)}
 .tprog-bar{flex:1;height:6px;border-radius:0;background:var(--bg);overflow:hidden;border:1px solid var(--line)}
-.tprog-bar>i{display:block;height:100%;width:0;background:var(--acc);transition:width .4s}
+.tprog-bar>i{display:block;height:100%;width:0;background:var(--tc,var(--acc));transition:width .4s}
 .tprog span{font-family:var(--mono);font-size:11px;color:var(--dim);flex:none}
 .termout{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:12px 14px;font-family:var(--mono);font-size:13px;line-height:1.5;
   white-space:pre-wrap;word-break:break-word}
 .termout .cmd{color:var(--fg)} .termout .cmd .p{color:var(--acc)}
 .termout .out{color:#aebacb} .termout .err{color:var(--bad)} .termout .ok{color:var(--good)}
 .termout .info{color:var(--warn)} .termout .dim{color:var(--faint)} .termout .hl{color:var(--acc2)}
-.termout .sys{color:var(--root)}
+.termout .sys{color:var(--root)} .termout .trk-title{color:var(--tc,var(--root))}
 .termout b{color:#fff;font-weight:700}
 .termout .block{display:block;margin:2px 0}
 .termchips{display:flex;gap:6px;overflow-x:auto;padding:7px 14px;border-top:1px solid var(--line);background:var(--panel);-webkit-overflow-scrolling:touch}
@@ -1412,19 +1415,19 @@ window.claude?.hot?.ready ? window.claude.hot.ready(start) : start();
 <style>
 .trk-ov .card{max-width:600px}
 .trk-head{display:flex;align-items:center;gap:12px;margin-bottom:6px}
-.trk-head .ic{min-width:44px;height:34px;padding:0 6px;border-radius:0;display:grid;place-items:center;font-family:var(--mono);font-size:12px;font-weight:700;background:var(--panel2);border:1px solid var(--line);flex:none}
+.trk-head .ic{min-width:44px;height:34px;padding:0 6px;border-radius:0;display:grid;place-items:center;font-family:var(--mono);font-size:12px;font-weight:700;background:var(--panel2);border:1px solid var(--tc,var(--line));color:var(--tc,var(--fg));flex:none}
 .trk-role{font-family:var(--mono);font-size:11px;letter-spacing:1px;color:var(--dim);text-transform:uppercase}
 .mod-list{display:flex;flex-direction:column;gap:8px;margin:14px 0}
 .mod-row{display:flex;gap:12px;align-items:flex-start;text-align:left;background:var(--panel2);border:1px solid var(--line);border-radius:0;padding:12px 13px;width:100%}
-.mod-row:hover{border-color:var(--acc)}
+.mod-row:hover{border-color:var(--tc,var(--acc))}
 .mod-row .num{width:26px;height:26px;border-radius:0;border:1px solid var(--faint);display:grid;place-items:center;font-family:var(--mono);font-size:12px;flex:none}
-.mod-row.done .num{background:var(--acc);border-color:var(--acc);color:#042017}
+.mod-row.done .num{background:var(--tc,var(--acc));border-color:var(--tc,var(--acc));color:#0a0d12}
 .mod-row b{display:block;font-size:14px;margin-bottom:2px}
 .mod-row span{font-size:12px;color:var(--dim);line-height:1.45}
 .skills{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
-.skills i{font-style:normal;font-family:var(--mono);font-size:11px;padding:3px 8px;border-radius:0;background:var(--bg);border:1px solid var(--line);color:var(--acc2)}
+.skills i{font-style:normal;font-family:var(--mono);font-size:11px;padding:3px 8px;border-radius:0;background:var(--bg);border:1px solid var(--line);color:var(--tc,var(--acc2));border-color:var(--tc,var(--line))}
 .lesson p,.lesson li{font-size:13.5px;line-height:1.6;color:var(--dim)} .lesson b{color:var(--fg)} .lesson code{font-family:var(--mono);color:var(--acc2);font-size:12.5px}
-.lesson ul{padding-left:18px;margin:6px 0} .lesson h4{margin:14px 0 4px;font-size:13px;font-family:var(--mono);color:var(--acc);letter-spacing:.5px}
+.lesson ul{padding-left:18px;margin:6px 0} .lesson h4{margin:14px 0 4px;font-size:13px;font-family:var(--mono);color:var(--tc,var(--acc));letter-spacing:.5px}
 .rank{font-family:var(--mono);font-size:12px;color:var(--warn);margin-top:4px}
 .termout .debrief{border:1px solid var(--line);border-radius:0;padding:12px 14px;margin:6px 0;background:var(--panel);white-space:normal;font-family:var(--sans)}
 .termout .debrief h4{margin:10px 0 4px;font-family:var(--mono);font-size:12px;color:var(--acc)} .termout .debrief p,.termout .debrief li{font-size:13px;color:var(--dim);line-height:1.55}
@@ -1767,21 +1770,42 @@ cmd('modelscan','ai','scan a model file for unsafe code','modelscan — checks m
 cmd('evalrun','ai','run the AI security test suite','evalrun — runs the app’s security evaluation suite (like promptfoo, garak or PyRIT in real teams): hundreds of adversarial test cases per category, scored pass/fail.\nRun it before every release, and after every guardrail change.',
  (a,ctx)=>{ const r=ctx.sc.evalrun(ctx); ctx.ev('evalrun',r.pass); return {o:r.o,h:1}; });
 
+// ---- counterintelligence
+cmd('exiftool','ci','read a file’s hidden metadata','exiftool — reads metadata hidden inside documents and images: author, software, internal file paths, GPS, edit history.\nAdversaries harvest it from public PDFs to learn usernames, server names and software versions. Strip it before publishing.',
+ (a,ctx)=>{ const f=a.find(x=>x[0]!=='-'); if(!f) return txt('usage: exiftool FILE',1); const n=node(ctx,resolve(ctx,f)); if(!n) return txt(`Error: File not found - ${f}`,1);
+   ctx.ev('exif',f); return txt(n.meta?Object.entries(n.meta).map(([k,v])=>`${k.padEnd(28)}: ${v}`).join('\n'):'File Type                   : TXT\n(no embedded metadata)'); });
+cmd('canary','ci','deploy and monitor honeytokens','canary — honeytokens: fake credentials, documents and accounts that nobody legitimate should ever touch. Any use is a high-confidence alert (ideas popularised by Thinkst Canary).\n  canary types\n  canary deploy <type> <location>\n  canary list\n  canary alerts',
+ (a,ctx)=>{ const C=ctx.sc.canary, st=ctx.st; st.tokens=st.tokens||[]; const [sub,type,...loc]=a;
+   if(sub==='types') return txt(Object.entries(C.types).map(([k,v])=>`${k.padEnd(9)} ${v}`).join('\n'));
+   if(sub==='deploy'){ if(!C.types[type]) return txt(`Unknown type. canary types`,1); if(!loc.length) return txt('usage: canary deploy <type> <location>',1);
+     if(st.tokens.some(t=>t.type===type)) return txt(`A ${type} token is already deployed.`,1);
+     st.tokens.push({type,loc:loc.join(' ')}); ctx.ev('canary',type); return txt(`Deployed ${type} token at ${loc.join(' ')}. Alerts go to the SOC.`); }
+   if(sub==='list') return txt(st.tokens.length?st.tokens.map(t=>`${t.type.padEnd(9)} ${t.loc}`).join('\n'):'No tokens deployed.');
+   if(sub==='alerts'){ ctx.ev('canaryAlerts'); if(st.tokens.length<3) return txt('No alerts. (Deploy at least one of each token type, then check back.)');
+     return {o:'<span class="dim">… 26 hours later …</span>\n'+C.alerts(st.tokens),h:1}; }
+   return txt('usage: canary types | deploy <type> <location> | list | alerts',1); });
+cmd('twist','ci','find lookalike domains','twist — generates lookalike versions of a domain (typos, swapped letters, extra words) and checks which are registered. Modelled on the open-source dnstwist.\nA new lookalike with mail (MX) records is usually being prepared for phishing.\n  twist vantage.example',
+ (a,ctx)=>{ const d=a[0]; if(!d) return txt('usage: twist <domain>',1); const r=ctx.sc.twist[d]; ctx.ev('twist',d);
+   return r?{o:r,h:1}:txt(`No registered lookalikes found for ${d}.`); });
+
 /* =========================================================================
    CURRICULUM
    ========================================================================= */
 const BASIC=['help','man','answer','clear','echo','pwd','whoami','id','hostname','ls','cd','cat','head','tail','grep','wc','sort','uniq','cut','awk','find','file','history'];
 const TRACKS={
-  red:{name:'Red Team',role:'Junior penetration tester',ic:'RED',cls:'hot',
+  red:{name:'Red Team',role:'Junior penetration tester',ic:'RED',cls:'trk-red',
     pitch:'Authorised offensive testing: work inside a written scope, find weaknesses before criminals do, and write them up so they get fixed.',
     next:'<ul><li><b>Practice:</b> OverTheWire Bandit (shell skills), TryHackMe "Jr Penetration Tester" path, Hack The Box Starting Point.</li><li><b>Learn next:</b> web app testing (OWASP Top 10, Burp Suite), Active Directory basics, scripting in Python and Bash.</li><li><b>Credentials people hire on:</b> CompTIA PenTest+, eJPT, then PNPT or OSCP.</li><li><b>Always:</b> only test systems you own or have written permission to test.</li></ul>'},
-  blue:{name:'Blue Team',role:'SOC analyst · tier 1 / sysadmin',ic:'BLU',cls:'co',
+  blue:{name:'Blue Team',role:'SOC analyst · tier 1 / sysadmin',ic:'BLU',cls:'trk-blue',
     pitch:'Defence: read the logs, spot the attack, contain it, and harden systems so the next one fails.',
     next:'<ul><li><b>Practice:</b> Blue Team Labs Online, LetsDefend, CyberDefenders, Splunk Boss of the SOC datasets.</li><li><b>Learn next:</b> a SIEM (Splunk or Elastic), Windows event logs and Sysmon, writing detections (Sigma), CIS Benchmarks for hardening.</li><li><b>Credentials people hire on:</b> CompTIA Security+, then CySA+ or BTL1.</li></ul>'},
-  intel:{name:'Threat Intel',role:'Junior CTI analyst',ic:'CTI',cls:'ad',
+  intel:{name:'Threat Intel',role:'Junior CTI analyst',ic:'CTI',cls:'trk-green',
     pitch:'Track adversaries: turn raw indicators into an understanding of who is attacking, how, and what the business should do about it.',
     next:'<ul><li><b>Practice:</b> TryHackMe CTI rooms, analysing public reports with MITRE ATT&CK Navigator, following vendor blogs and writing your own one-page briefs.</li><li><b>Learn next:</b> MISP/OpenCTI, STIX, the Diamond Model, structured analytic techniques, writing for executives.</li><li><b>Reading:</b> FIRST TLP standard, ICD 203 (analytic standards), "Intelligence-Driven Incident Response".</li></ul>'},
-  ai:{name:'AI Security',role:'AI security analyst',ic:'AI',cls:'vs',
+  ci:{name:'Counterintelligence',role:'Insider threat / CI analyst',ic:'CI',cls:'trk-purple',
+    pitch:'Protect the organisation from people trying to learn its secrets: shrink what you leak, catch insiders lawfully, trap intruders with deception, and spot targeting early.',
+    next:'<ul><li><b>Practice:</b> run an OSINT review of your own employer (with permission) using public sources; deploy free Canarytokens in a home lab.</li><li><b>Learn next:</b> insider-risk programmes (CERT National Insider Threat Center guides), OSINT methodology, social-engineering awareness, privacy and employment law basics.</li><li><b>Roles:</b> insider-risk analyst, corporate investigations, security awareness, CI/OSINT analyst.</li></ul>'},
+  ai:{name:'AI Security',role:'AI security analyst',ic:'AI',cls:'trk-yellow',
     pitch:'Secure apps built on language models: prompt injection, over-powered agents, leaked secrets, poisoned or trojaned models, and the evaluations that catch them.',
     next:'<ul><li><b>Reference:</b> OWASP Top 10 for LLM Applications, MITRE ATLAS, NIST AI RMF.</li><li><b>Practice:</b> Lakera’s Gandalf (prompt injection), Prompt Airlines, running promptfoo or garak against a local model.</li><li><b>Learn next:</b> how RAG and tool-calling agents work, threat-modelling AI features, red-team evaluation design.</li></ul>'},
 };
@@ -2173,6 +2197,134 @@ const MODS=[
   on(c,ev,v){ if(ev==='read'&&/PIR\.txt/.test(v)) c.seen.pir=1; if(ev==='attack'&&/T1133|T1190/.test(v)) c.seen.t1133=1; if(ev==='submit'&&v) c.st.submitted=true; },
   debrief:'<p>A finished answer to the CISO, in three sentences:</p><p><i>"Copper Vulture is <b>likely</b> to target us within 90 days (moderate confidence): over a third of its recent victims are US healthcare, and it gets in through VPN appliances like ours. First action: patch and add MFA to the VPN this week and close vendor RDP. Second: alert on large uploads to cloud storage, their exfiltration method."</i></p><ul><li>Notice what’s left out: malware internals, hashes, jargon. Those go in the technical annex.</li></ul>' },
 
+/* ======================= COUNTERINTELLIGENCE ======================= */
+{ id:'c1', track:'ci', title:'Footprint & OPSEC Review',
+  sum:'See your company the way an adversary does: job ads, staff posts, a public code repo and document metadata all leak useful details.',
+  skills:['OSINT','OPSEC','exiftool','secrets in repos','exposure reduction'],
+  lesson:`<p>Before attacking, adversaries study you from public sources (OSINT). Counterintelligence starts by finding what you leak and shrinking it. That’s <b>OPSEC</b> (operations security).</p>
+<h4>COMMON LEAKS</h4><ul><li><b>Job postings</b> name your exact security products and versions.</li><li><b>Staff social media</b> shows badges, office layouts, org charts and on-call numbers.</li>
+<li><b>Public code repos</b> leak internal hostnames and live secrets.</li><li><b>Document metadata</b> carries usernames, internal file-server paths and software versions.</li></ul>
+<p>The fix is rarely "hide everything". Remove what helps an attacker more than it helps you.</p>`,
+  brief:'You run the exposure review for <b>Vantage Labs</b>. A red-team partner collected public material into <b>/cases/CI-OPSEC/</b>. Find what an adversary could use, and recommend fixes.',
+  cmds:[...BASIC,'exiftool','report'], chips:['ls /cases/CI-OPSEC','cat /cases/CI-OPSEC/jobs.txt','exiftool /cases/CI-OPSEC/Q3_investor_update.pdf','grep -n "int.vantage" /cases/CI-OPSEC/github_config.yml','report'],
+  make(){ const h=H('analyst','ci-ws','/home/analyst',{
+      '/cases/CI-OPSEC/jobs.txt':'SENIOR NETWORK ENGINEER (posted on 3 job boards)\n- Maintain our Palo Alto GlobalProtect VPN (PAN-OS 10.2) and Okta SSO\n- Own Jenkins at jenkins.int.vantage.example\n- On-call rotation for the Halcyon research cluster',
+      '/cases/CI-OPSEC/social_posts.txt':'@dana_builds: First day at Vantage! [photo: badge visible, name + barcode readable]\n@m_ortega: Our lab’s whiteboard after the Halcyon sprint [photo: hostnames on whiteboard]\n@jw_it: If the VPN dies ping on-call at +1-555-0142 ;)',
+      '/cases/CI-OPSEC/github_config.yml':'# public repo: vantage-labs/deploy-scripts (pushed 2026-09-14)\ndb_host: prod-db-03.int.vantage.example\nbuild_server: jenkins.int.vantage.example\nslack_webhook: https://hooks.slack.example/services/T0V4N/B0A1/REDACTED-EXAMPLE\nlog_level: debug',
+      '/cases/CI-OPSEC/Q3_investor_update.pdf':{c:'%PDF-1.7 ...',ftype:'PDF document, version 1.7',meta:{'File Type':'PDF','Author':'d.chen','Last Modified By':'e.ward','Creator Tool':'Microsoft PowerPoint for Microsoft 365','Company':'Vantage Labs','Template':'\\\\fs01.int.vantage.example\\templates\\investor.potx','Create Date':'2026:10:02 09:14:11'}},
+    }); return {hosts:{me:h},h,net:{},st:{}}; },
+  truth:{top_risk:['webhook','repo','github','secret'],fix:['revoke','rotate','remove','delete'],metadata:['strip','scrub','remove','clean'],people:['training','awareness','policy','brief']},
+  reportHint:'top_risk = the live secret in the public repo · fix = revoke/rotate it and remove the file · metadata = strip it before publishing · people = staff awareness or a social-media policy.',
+  obj:[
+    {t:'Which VPN product do the job postings reveal?', ans:['globalprotect','palo alto'], h:'cat /cases/CI-OPSEC/jobs.txt'},
+    {t:'Which internal file server leaks in the PDF’s metadata? (hostname)', ans:['fs01.int.vantage.example','fs01'], h:'exiftool /cases/CI-OPSEC/Q3_investor_update.pdf. Look at the Template path.'},
+    {t:'Which production database hostname leaks in the public repo?', ans:['prod-db-03.int.vantage.example','prod-db-03'], h:'cat /cases/CI-OPSEC/github_config.yml'},
+    {t:'Which leaked item is a live secret that must be revoked today?', ans:['slack','webhook'], h:'Hostnames help an attacker map you. A credential lets them act. Which line is a credential?'},
+    {t:'File your recommendations', h:'report set top_risk Slack webhook in public repo · fix Revoke the webhook and remove the file · metadata Strip metadata before publishing · people Staff awareness on badge photos · report submit', ok:c=>c.st.submitted},
+  ],
+  on(c,ev,v){ if(ev==='submit'&&v) c.st.submitted=true; },
+  debrief:'<p>Put together, an adversary now knows your VPN make and version (to check for known bugs), your SSO provider (to clone the login page), internal hostnames, a file-server path, staff names and an on-call number to call while pretending to be IT.</p><ul><li>Rank exposures by what they enable. The webhook is fixed today; job-ad wording is fixed in the next template.</li><li>Removing a secret from a repo isn’t enough. It stays in the git history and in other people’s clones. Revoke it first.</li><li>Repeat the review quarterly. New hires, new posts and new repos bring new leaks.</li></ul>' },
+
+{ id:'c2', track:'ci', title:'Insider Threat Investigation',
+  sum:'A departing engineer may be taking research to a competitor. Work within your legal authorisation, establish a baseline, and build an evidence-backed timeline.',
+  skills:['authorisation','baselining','file-access logs','exfil channels','hand-off to legal/HR'],
+  lesson:`<p>Insider investigations involve real people’s careers and privacy. Process matters as much as findings.</p>
+<h4>RULES OF THE ROAD</h4><ul><li><b>Authorisation first.</b> Work only within the scope legal and HR approved: whose data, which systems, which dates.</li>
+<li><b>Baseline before judging.</b> Big downloads are normal for some roles. Compare with the subject’s own history and their peers.</li>
+<li><b>Correlate sources:</b> file access, USB, web uploads, badge records. One log is a hint; several agreeing logs are evidence.</li>
+<li><b>Don’t confront.</b> Preserve evidence and hand findings to legal and HR. They decide what happens next.</li></ul>`,
+  brief:'HR referred case <b>IT-0907</b>: senior engineer <b>r.kessler</b> resigned to join a competitor. Read the authorisation, then work out whether research data left the company, and how.',
+  cmds:[...BASIC,'report'], chips:['cat /cases/IT-0907/authorization.txt','grep kessler /cases/IT-0907/file_access.log | head','grep -c kessler /cases/IT-0907/file_access.log','cat /cases/IT-0907/proxy.log','report'],
+  make(){ const fa=[]; const team=['a.ngata','p.sorensen','r.kessler'];
+    for(let d=3;d<=12;d++) for(const u of team) fa.push(`2026-11-${pad(d)} ${pad(9+(d+u.length)%8)}:${pad((d*7+u.length)%60)} user=${u} action=read path=/shares/halcyon/${['notes','results','sims'][d%3]}/run_${d}${u.length}.dat bytes=${(2+d%5)*1048576}`);
+    for(let i=0;i<14;i++) fa.push(`2026-11-13 02:${pad(5+i*3)} user=r.kessler action=read path=/shares/halcyon/${i<8?'designs':'models'}/halcyon_${['core','thermal','firmware','bom','tests','spec','cad','model'][i%8]}_v${3+i}.zip bytes=${(180+i*23)*1048576}`);
+    fa.sort();
+    const h=H('ci-analyst','ci-ws','/home/ci-analyst',{
+      '/cases/IT-0907/authorization.txt':'CASE IT-0907 · AUTHORISATION\nApproved by: Office of General Counsel (Legal), with HR\nSubject: r.kessler (corporate accounts and devices only)\nScope: file access, proxy, USB and badge logs, 2026-11-01 to 2026-11-15\nNot in scope: personal accounts, personal devices, private messages\nInstruction: do not contact the subject. Report findings to Legal.',
+      '/cases/IT-0907/file_access.log':fa.join('\n'),
+      '/cases/IT-0907/usb.log':'2026-11-12 16:20 host=ENG-LT-31 user=r.kessler device="Logitech Receiver" class=HID allowed\n2026-11-13 02:51 host=ENG-LT-31 user=r.kessler device="SanDisk Extreme 1TB" class=storage BLOCKED by policy',
+      '/cases/IT-0907/proxy.log':'2026-11-13 02:58 user=r.kessler POST https://filedrop-personal.example/upload bytes=1942011904 category=personal-storage\n2026-11-13 03:31 user=r.kessler POST https://filedrop-personal.example/upload bytes=1311522816 category=personal-storage\n2026-11-13 10:02 user=a.ngata GET https://docs.vantage.example/halcyon bytes=88211',
+      '/cases/IT-0907/badge.log':'2026-11-13 01:47 badge=r.kessler door=ENG-2F-EAST IN\n2026-11-13 03:52 badge=r.kessler door=ENG-2F-EAST OUT',
+      '/cases/IT-0907/hr_note.txt':'Resignation submitted 2026-11-10. Last day 2026-11-21. New employer: Ostrava Dynamics (competitor).',
+    }); return {hosts:{me:h},h,net:{},st:{}}; },
+  truth:{finding:['upload','exfil','personal'],evidence:['proxy','file_access','usb','badge'],next_step:['legal','preserve']},
+  reportHint:'finding = bulk Halcyon files uploaded to personal storage · evidence = which logs agree · next_step = preserve evidence and hand to Legal (no confrontation).',
+  obj:[
+    {t:'Who approved this investigation?', ans:['legal','general counsel','counsel'], h:'cat /cases/IT-0907/authorization.txt'},
+    {t:'Baseline: did other Halcyon engineers access files after hours? (yes/no)', ans:['no'], h:'grep -v kessler /cases/IT-0907/file_access.log. Look at the times.'},
+    {t:'How many Halcyon files did r.kessler read on 2026-11-13 between 02:00 and 03:00?', ans:['14'], h:'grep "2026-11-13 02:" /cases/IT-0907/file_access.log | grep -c kessler'},
+    {t:'The USB copy was blocked. Where did the data go instead? (domain)', ans:['filedrop-personal.example'], h:'cat /cases/IT-0907/proxy.log'},
+    {t:'Which log puts r.kessler physically in the building at that time?', ans:['badge'], h:'ls /cases/IT-0907, then check the one that records doors.'},
+    {t:'Report to Legal', h:'report set finding Bulk Halcyon files uploaded to personal storage · evidence file_access, usb, proxy and badge logs agree · next_step Preserve evidence and hand to Legal · report submit', ok:c=>c.st.submitted},
+  ],
+  on(c,ev,v){ if(ev==='submit'&&v) c.st.submitted=true; },
+  debrief:'<p>Four independent sources tell one story: building entry at 01:47, 14 bulk reads at 02:05–02:44, a blocked USB attempt at 02:51, then 3.2 GB uploaded to personal storage. That’s what turns suspicion into evidence.</p><ul><li>You stayed in scope: no personal accounts, no contacting the subject. Evidence gathered outside the authorisation can wreck a legal case and expose the company.</li><li>Next steps belong to Legal: preserve logs and the laptop image, and decide whether to contact the file-sharing provider or the new employer.</li><li>Lessons for prevention: watch closely for unusual data access in the weeks after a resignation, and block personal-storage uploads from research systems.</li></ul>' },
+
+{ id:'c3', track:'ci', title:'Deception & Canary Tokens',
+  sum:'Plant honeytokens an intruder would find irresistible, then read the alert that exposes a compromised account.',
+  skills:['honeytokens','deception','high-signal alerts','compromised accounts'],
+  lesson:`<p>Detection usually means finding a needle in a haystack of normal activity. <b>Deception flips that</b>: you plant something no legitimate person ever touches, so <i>any</i> touch is an alert.</p>
+<h4>KEY IDEAS</h4><ul><li><b>Honeytokens:</b> fake cloud keys in config files, a juicy-looking document, a fake admin account, a DNS name that only appears in your own files.</li>
+<li>Place them where an intruder looks: home folders, shared drives, password-ish filenames.</li><li>They make <b>very few false positives</b>, so an alert justifies fast action.</li><li>Tell almost nobody. A token every admin knows about stops being a trap.</li></ul>`,
+  brief:'Threat intel suggests someone may already be inside <b>Vantage Labs</b>. Deploy one of each honeytoken type somewhere believable, then check the alerts.',
+  cmds:[...BASIC,'canary','report'], chips:['canary types','ls /shares','canary deploy awskey /home/svc-deploy/.aws/credentials','canary list','canary alerts'],
+  make(){ const h=H('ci-analyst','ci-ws','/home/ci-analyst',{
+      '/shares/finance/README':'Finance team share. Budgets, payroll exports.','/shares/engineering/halcyon/README':'Halcyon project docs.',
+      '/home/svc-deploy/.aws/README':'deployment credentials live here','/home/ci-analyst/placement_tips.txt':'Good spots: ~/.aws/credentials of a service account, a finance share, a file named like passwords/VPN/payroll, a dormant-sounding admin account.',
+    }); return {hosts:{me:h},h,net:{},st:{}}; },
+  canary:{ types:{awskey:'fake cloud access key in a credentials file',doc:'decoy document that phones home when opened',account:'fake admin account that alerts on any login attempt',dns:'hostname that alerts whenever someone resolves it'},
+    alerts:t=>{ const has=x=>t.find(y=>y.type===x); let o='';
+      if(has('doc')) o+=`<span class="err">ALERT</span> 2026-11-18 03:12  doc token opened\n  file: ${esc(has('doc').loc)}\n  host: ENG-WS-14   account: <b>svc-print</b>   via SMB from 10.20.4.77\n`;
+      if(has('awskey')) o+=`<span class="err">ALERT</span> 2026-11-18 03:40  awskey token used\n  API call: ListBuckets from 198.51.100.77 (outside the company)\n`;
+      if(has('account')) o+=`<span class="info">ok</span>    no login attempts on ${esc(has('account').loc)}\n`;
+      if(has('dns')) o+=`<span class="info">ok</span>    no lookups of ${esc(has('dns').loc)}\n`;
+      return o; } },
+  truth:{account:['svc-print'],host:['eng-ws-14'],action:['disable','reset','isolate','rotate']},
+  reportHint:'account svc-print · host ENG-WS-14 · action: disable the account and isolate the host, then hunt for how it was compromised.',
+  obj:[
+    {t:'Deploy a fake cloud key', h:'canary deploy awskey /home/svc-deploy/.aws/credentials', ok:c=>(c.st.tokens||[]).some(t=>t.type==='awskey')},
+    {t:'Deploy a decoy document', h:'canary deploy doc /shares/finance/VPN_passwords_2026.xlsx', ok:c=>(c.st.tokens||[]).some(t=>t.type==='doc')},
+    {t:'Deploy a fake admin account', h:'canary deploy account adm-backup-legacy', ok:c=>(c.st.tokens||[]).some(t=>t.type==='account')},
+    {t:'Check the alerts', h:'canary alerts', ok:c=>c.seen.canaryAlerts&&(c.st.tokens||[]).length>=3},
+    {t:'Which account opened the decoy document?', ans:['svc-print'], h:'Read the doc alert.'},
+    {t:'Why does a print service account opening a finance file matter?', ans:['compromised','stolen','attacker','no reason','no legitimate','shouldn'], h:'A printer service has no reason to browse files. What does that say about who is really using it?'},
+    {t:'Act on it', h:'report set account svc-print · host ENG-WS-14 · action Disable the account, isolate the host, rotate credentials · report submit', ok:c=>c.st.submitted},
+  ],
+  on(c,ev,v){ if(ev==='submit'&&v) c.st.submitted=true; },
+  debrief:'<p>Two tokens fired within 30 minutes: someone using <b>svc-print</b> browsed the finance share and tried the fake cloud key from outside the company. An ordinary log search would have struggled to spot this. The honeytokens made it obvious.</p><ul><li>Next: disable svc-print, isolate ENG-WS-14, rotate anything that account could reach, and work out how it was compromised (blue team mission territory).</li><li>Rotate token locations from time to time, and keep the list of where they are on a need-to-know basis.</li></ul>' },
+
+{ id:'c4', track:'ci', title:'Spotting Targeting Early',
+  sum:'Catch an adversary preparing an operation: a slow password spray, lookalike domains being set up, and fake recruiters fishing for project details.',
+  skills:['password spray','lookalike domains','elicitation','campaign assessment'],
+  lesson:`<p>Attacks have a preparation phase. Spot it and you can act <b>before</b> the main operation.</p>
+<h4>SIGNS OF TARGETING</h4><ul><li><b>Password spraying:</b> one or two common passwords tried against many accounts, slowly and from rotating IPs, to stay under lockout limits. Look for <i>many users, few attempts each</i>.</li>
+<li><b>Lookalike domains</b> registered recently, especially with mail (MX) records: phishing infrastructure being built.</li>
+<li><b>Elicitation:</b> friendly strangers (fake recruiters, "researchers", "journalists") asking staff about specific projects.</li></ul>
+<p>Separately each looks minor. Together, aimed at the same project, they’re a campaign.</p>`,
+  brief:'Several odd things were reported this week at <b>Vantage Labs</b>. The data is in <b>/intel/</b>. Decide whether this is one coordinated effort, what it’s after, and what to do now.',
+  cmds:[...BASIC,'twist','whois','report'], chips:['head /intel/sso_signin.log','grep -c FAIL /intel/sso_signin.log','grep SUCCESS /intel/sso_signin.log','twist vantage.example','cat /intel/staff_reports.txt'],
+  make(){ const first=['a.baker','b.cho','c.diaz','d.chen','e.ward','f.ali','g.hart','h.ito','i.kumar','j.lund','k.osei','l.moss','m.ortega','n.park','o.reyes','p.sorensen','q.tan','r.kessler','s.uddin','t.vance','u.wolf','v.xu','w.yates','x.zhou','y.adams','z.brooks','aa.cole','ab.dunn','ac.ellis','ad.frey','ae.gold','af.hale','ag.ivey','ah.jung','ai.kaur','aj.lowe'];
+    const L=[]; first.forEach((u,i)=>{ const t=60+i*197; L.push(`2026-11-17T${pad(1+Math.floor(t/3600))}:${pad(Math.floor(t%3600/60))}:${pad(t%60)}Z signin ${u==='k.osei'?'SUCCESS':'FAIL   '} user=${u}@vantage.example ip=203.0.113.${20+(i*7)%60} ua=python-requests/2.31`); });
+    L.push('2026-11-17T09:02:11Z signin FAIL    user=j.diaz@vantage.example ip=10.20.1.55 ua=Mozilla/5.0','2026-11-17T09:02:40Z signin SUCCESS user=j.diaz@vantage.example ip=10.20.1.55 ua=Mozilla/5.0'); L.sort();
+    const h=H('ci-analyst','ci-ws','/home/ci-analyst',{
+      '/intel/sso_signin.log':L.join('\n'),
+      '/intel/staff_reports.txt':'1. m.ortega (Halcyon): LinkedIn message from "Tara, recruiter at NovaQuant" offering 2x salary, asked what simulation tools the Halcyon team uses.\n2. p.sorensen (Halcyon): same "Tara" by email from tara@vantage-careers.example, asked for an org chart "to tailor the offer".\n3. d.chen (finance): call from "IT support" asking to confirm VPN details. Hung up.',
+    }); return {hosts:{me:h},h,net:{},st:{}}; },
+  twist:{'vantage.example':'<b>LOOKALIKE                    REGISTERED   A              MX</b>\nvantage-sso.example          2026-11-14   203.0.113.140  -\n<span class="err">vantage-careers.example      2026-11-12   203.0.113.141  mx1.203-0-113-141.example</span>\nvantagelabs-hr.example       2026-11-15   -              -\nvan7age.example              2019-03-02   192.0.2.10     -   (parked, old)'},
+  ti:{whois:{'vantage-careers.example':'Creation Date: 2026-11-12\nRegistrar: QuickReg LLC\nName Server: ns1.203-0-113-141.example','vantage-sso.example':'Creation Date: 2026-11-14\nRegistrar: QuickReg LLC\nName Server: ns1.203-0-113-141.example'},dns:{},ioc:{},pivot:{},actors:[]},
+  truth:{activity:['spray','phish','elicit','recon'],target:['halcyon'],action:['reset','mfa','block','brief','takedown']},
+  reportHint:'activity = password spray + lookalike domains + elicitation · target = Halcyon · action: reset k.osei and check MFA, block the lookalikes, brief the Halcyon team.',
+  obj:[
+    {t:'What attack pattern is in the sign-in log?', ans:['spray','password spray','spraying'], h:'One attempt per user, many users, rotating IPs, a script user-agent.'},
+    {t:'How many accounts did the spray try? (from 203.0.113.x)', ans:['36'], h:'grep -c 203.0.113 /intel/sso_signin.log'},
+    {t:'Which account did the spray break into?', ans:['k.osei'], h:'grep SUCCESS /intel/sso_signin.log. Ignore the internal 10.x IP.'},
+    {t:'Which lookalike domain is set up to send email?', ans:['vantage-careers.example'], h:'twist vantage.example. Look for the one with an MX record.'},
+    {t:'Which project is the elicitation aimed at?', ans:['halcyon'], h:'cat /intel/staff_reports.txt'},
+    {t:'Assess and act', h:'report set activity Password spray, lookalike domains, recruiter elicitation · target Halcyon · action Reset k.osei and enforce MFA, block lookalikes, brief Halcyon staff · report submit', ok:c=>c.st.submitted},
+  ],
+  on(c,ev,v){ if(ev==='submit'&&v) c.st.submitted=true; },
+  debrief:'<p>The fake recruiter wrote from <b>vantage-careers.example</b>, which shares a name server with <b>vantage-sso.example</b>, a domain that looks built for a fake login page. A spray has already landed one account. That’s one campaign, aimed at Halcyon, and it’s ahead of you.</p><ul><li>Immediate: reset k.osei, revoke its sessions, confirm MFA is enforced, and block or take down the lookalikes.</li><li>People: brief the Halcyon team that "recruiters" may be fishing, and give them an easy way to report contacts.</li><li>Hand the domains and IPs to threat intel to pivot on, and keep watching for more lookalikes.</li></ul>' },
+
 /* ======================= AI SECURITY ======================= */
 { id:'a1', track:'ai', title:'Prompt Injection Incident',
   sum:'A support chatbot emailed customer data to an outsider. Trace the indirect prompt injection through the RAG pipeline and fix the controls.',
@@ -2332,9 +2484,9 @@ function open(id){
   c.ev=(e,v)=>{ c.seen[e]=1; if(sc.on) sc.on(c,e,v); };
   T.c=c; closeTrack();
   $('menu').classList.remove('on'); $('term').classList.add('on');
-  const tr=TRACKS[sc.track]; const r=$('tRole'); r.textContent=`${tr.name} · mission ${modsOf(sc.track).indexOf(sc)+1}`; r.className='tl '+({red:'red',blue:'blue',intel:'intel',ai:'intel'})[sc.track]; $('tName').textContent=sc.title;
+  const tr=TRACKS[sc.track]; setTrk($('term'),tr); const r=$('tRole'); r.textContent=`${tr.name} · mission ${modsOf(sc.track).indexOf(sc)+1}`; r.className='tl'; $('tName').textContent=sc.title;
   out().innerHTML='';
-  line(`<span class="sys">┌─ ${esc(tr.name.toUpperCase())} · ${esc(sc.title)}</span>`,'',1);
+  line(`<span class="trk-title">┌─ ${esc(tr.name.toUpperCase())} · ${esc(sc.title)}</span>`,'',1);
   line(sc.brief,'out',1);
   line(`<span class="dim">help lists commands · man &lt;command&gt; teaches one · answer &lt;text&gt; answers a question · TASKS for objectives &amp; hints · CMDS for the reference</span>`,'',1);
   announce(c);
@@ -2442,8 +2594,9 @@ $('termout').addEventListener('click',e=>{ if(e.target.closest('button'))return;
 const ov=document.createElement('div'); ov.className='ov trk-ov'; ov.id='trkOv'; ov.innerHTML='<div class="card" id="trkCard"></div>'; $('app').appendChild(ov);
 ov.addEventListener('click',e=>{ if(e.target===ov) closeTrack(); });
 function closeTrack(){ ov.classList.remove('on'); }
+function setTrk(el,tr){ [...el.classList].filter(c=>c.startsWith('trk-')).forEach(c=>el.classList.remove(c)); el.classList.add(tr.cls); }
 function openTrack(t){
-  const tr=TRACKS[t]; const list=modsOf(t); const n=doneIn(t);
+  const tr=TRACKS[t]; const list=modsOf(t); const n=doneIn(t); setTrk(ov,tr);
   $('trkCard').innerHTML=`<div class="trk-head"><span class="ic">${tr.ic}</span><div><h2 style="margin:0">${esc(tr.name)}</h2><div class="trk-role">Goal: ${esc(tr.role)}</div></div></div>
     <p style="color:var(--dim);font-size:13.5px;line-height:1.55;margin:8px 0 0">${esc(tr.pitch)}</p>
     <div class="rank">${n}/${list.length} missions complete${n===list.length?' · entry-level skills covered ✓':''}</div>
@@ -2454,7 +2607,7 @@ function openTrack(t){
   $('trkClose').onclick=closeTrack; ov.classList.add('on'); $('trkCard').scrollTop=0;
 }
 function openLesson(id){
-  const m=MODS.find(x=>x.id===id); const tr=TRACKS[m.track]; const i=modsOf(m.track).indexOf(m)+1;
+  const m=MODS.find(x=>x.id===id); const tr=TRACKS[m.track]; const i=modsOf(m.track).indexOf(m)+1; setTrk(ov,tr);
   $('trkCard').innerHTML=`<div class="trk-role">${esc(tr.name)} · mission ${i} of ${modsOf(m.track).length}</div><h2 style="margin:4px 0 6px">${esc(m.title)}</h2>
     <div class="skills">${m.skills.map(s=>`<i>${esc(s)}</i>`).join('')}</div>
     <div class="lesson"><h4>BRIEFING</h4>${m.lesson}<h4>YOUR TASK</h4><p>${m.brief}</p></div>
@@ -2467,7 +2620,7 @@ function renderMenu(){
   const box=$('trainModes'); box.innerHTML='';
   for(const [t,tr] of Object.entries(TRACKS)){
     const n=doneIn(t), L=modsOf(t).length;
-    const b=document.createElement('button'); b.className='mode '+tr.cls;
+    const b=document.createElement('button'); b.className='mode trk '+tr.cls;
     b.innerHTML=`<div class="mt"><span class="ic">${tr.ic}</span>${esc(tr.name)}</div><div class="pl">${esc(tr.role)} · ${n}/${L} done</div><p>${esc(tr.pitch)}</p>`;
     b.onclick=()=>openTrack(t); box.appendChild(b);
   }
