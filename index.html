@@ -28,6 +28,62 @@ html[data-tint="on"] :is(#term,.trk-ov,#jack):is(.trk-red,.trk-blue,.trk-green,.
 html[data-fx="off"] body::before,html[data-fx="off"] body::after,html[data-fx="off"] #app::after,
 html[data-fx="off"] .glitch::before,html[data-fx="off"] .glitch::after{display:none!important}
 html[data-fx="off"] #app.hit{animation:none!important}
+/* split screen */
+#split{flex-direction:column;background:var(--bg)}
+.spl-body{flex:1;min-height:0;display:flex;position:relative}
+.spl-body.two{flex-direction:row}
+.station{flex:1;min-width:0;min-height:0;display:flex;flex-direction:column;border-right:1px solid var(--line)}
+.station:last-of-type{border-right:0}
+.st-head{display:flex;gap:10px;align-items:center;padding:7px 10px;border-bottom:1px solid var(--line);background:var(--panel)}
+.st-name{font-family:var(--mono);font-size:12px;letter-spacing:1.5px;color:var(--acc);flex:none}
+.station[data-pid="guest"] .st-name{color:var(--acc2)}
+.st-meters{flex:1;min-width:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.st-meters .ml{font-size:9px}
+.bar.threat>i{background:var(--bad)} .bar.energy>i{background:var(--acc2)}
+.st-maps{flex:1;min-height:150px;display:flex}
+.st-pane{flex:1;min-width:0;position:relative;overflow:hidden;border-right:1px solid var(--line);
+  background-image:linear-gradient(color-mix(in srgb,var(--line) 45%,transparent) 1px,transparent 1px),linear-gradient(90deg,color-mix(in srgb,var(--line) 45%,transparent) 1px,transparent 1px);background-size:28px 28px}
+.st-pane:last-child{border-right:0}
+.st-pane.cur{box-shadow:inset 0 0 0 1px var(--acc)}
+.st-pane.def.cur{box-shadow:inset 0 0 0 1px var(--bad)}
+.pane-h{position:absolute;top:6px;left:8px;z-index:3;background:none;border:0;padding:0;font-family:var(--mono);font-size:10px;letter-spacing:1.5px;color:var(--acc)}
+.st-pane.def .pane-h{color:var(--bad)}
+.spl-map{position:absolute;inset:26px 8px 18px}
+.spl-map .node{width:82px}
+.spl-map .node .chip{width:44px;height:32px;font-size:10px}
+.spl-map .node .nm{font-size:10px}
+.spl-map .node .st{font-family:var(--mono);font-size:8.5px;letter-spacing:1px;color:var(--faint)}
+.spl-map .node .st.def{color:var(--bad)}
+.node.mini.breach .chip{border-color:var(--bad);color:var(--bad);animation:alarm 1.2s ease infinite}
+.links line.alarm{stroke:var(--bad)}
+.st-sheet{padding:8px 10px;border-top:1px solid var(--line);background:var(--panel)}
+.st-sel{display:flex;align-items:baseline;gap:8px;font-size:14px}
+.st-tag{font-family:var(--mono);font-size:10px;letter-spacing:1.5px;color:var(--acc)}
+.st-sheet.def .st-tag{color:var(--bad)}
+.st-keys{margin-left:auto;font-family:var(--mono);font-size:10px;color:var(--faint)}
+.st-info{font-family:var(--mono);font-size:11px;color:var(--dim);margin:3px 0 6px;line-height:1.5}
+.st-info .vn{color:var(--bad)} .st-info .pa{color:var(--good)} .st-info .lk{color:var(--warn)}
+.st-acts{display:grid;grid-template-columns:repeat(auto-fit,minmax(118px,1fr));gap:6px}
+.st-acts .act{padding:7px 9px;position:relative}
+.st-acts .act b{font-size:12.5px} .st-acts .act span{font-size:9.5px}
+.kb{font-style:normal;font-family:var(--mono);font-size:9.5px;border:1px solid var(--line);color:var(--dim);padding:0 4px;margin-left:4px}
+.st-acts .act .kb{position:absolute;top:5px;right:6px;margin:0}
+.spl-feed{position:absolute;left:50%;bottom:6px;transform:translateX(-50%);display:none}
+.spl-body.one .spl-feed,.spl-body.two .spl-feed{display:flex;flex-direction:column;gap:3px;pointer-events:none;width:min(520px,90%);z-index:4}
+.spl-feed .ln{max-width:none;font-size:10.5px}
+.spl-body.one{flex-direction:column} .spl-body.one .spl-feed{position:static;transform:none;width:auto;padding:6px 10px;border-top:1px solid var(--line)}
+.spl-body.two .spl-feed{bottom:auto;top:46px;opacity:.9}
+@media (max-width:640px){
+  .spl-body.one{overflow-y:auto} .station.solo{flex:none;min-height:100%}
+  .station.solo .st-maps{flex-direction:column;flex:none} .station.solo .st-pane{border-right:0;border-bottom:1px solid var(--line);min-height:210px}
+  .st-meters{grid-template-columns:repeat(2,minmax(0,1fr));gap:4px 8px}
+}
+@media (orientation:portrait){
+  .spl-body.two{flex-direction:column}
+  .spl-body.two .station{border-right:0;border-bottom:1px solid var(--line)}
+  .spl-body.two .station[data-pid="guest"]{transform:rotate(180deg)}
+  .spl-body.two .spl-feed{display:none}
+}
 /* settings */
 .menubar{display:flex;justify-content:flex-end;margin-bottom:10px}
 .set-card{max-width:640px}
@@ -347,6 +403,17 @@ button{font-family:inherit;color:inherit;cursor:pointer}
     <div class="sheet" id="sheet"></div>
   </div>
 
+  <!-- ================= SPLIT SCREEN ================= -->
+  <section id="split" class="screen">
+    <div class="topbar">
+      <button class="iconbtn" id="splBack" title="Leave" type="button">‹</button>
+      <div class="obj"><div class="ol">SPLIT SCREEN</div><div class="objv">Root the rival core · protect yours</div></div>
+      <button class="iconbtn" id="splHelp" title="Help" type="button">?</button>
+      <div class="clock mono" id="splClock">--:--</div>
+    </div>
+    <div class="spl-body" id="splBody"></div>
+  </section>
+
   <!-- ================= TERMINAL TRAINING ================= -->
   <section id="term" class="screen">
     <div class="termtop">
@@ -548,6 +615,7 @@ function startMatch(mode,opts){
   audio();
   G.mode=mode; G.boards=[]; G.atk={}; G.selNode=null; G.log=[]; G.running=true; G.t0=now();
   G.difficulty=opts.difficulty||1;
+  G.view=opts.view||'board'; G.local=!!opts.local;
   G.me = NET.mode==='guest' ? 'guest' : 'host';
 
   if(mode==='duel'){
@@ -640,15 +708,15 @@ function beginOp(pid,kind,nodeId,si){
   sec *= (kind==='scan'||kind==='cover')?1:fwMul(b,nodeId);
   sec *= (G.mode==='ai'||G.mode==='coop')? (1 - (G.difficulty-1)*0.0) : 1;
   a.op={kind,nodeId,si:si==null?-1:si,t:0,dur:sec,board:a.atkBoard};
-  if(pid===G.me){ sfx[kind==='scan'?'scan':'go'](); }
+  if(pid===G.me||G.local){ sfx[kind==='scan'?'scan':'go'](); }
   return true;
 }
 
 function finishOp(pid){
   const a=G.atk[pid], op=a.op; if(!op) return;
   const b=G.boards[op.board], d=b.dyn[op.nodeId], n=node(b,op.nodeId);
-  const mine = pid===G.me;
-  const who = mine?'you':(pid==='host'?'mate':'mate');
+  const mine = pid===G.me && !G.local;
+  const who = G.local?(pid==='host'?'P1':'P2'):(mine?'you':(G.mode==='duel'?'rival':'mate'));
   a.op=null;
   const addTrace=v=>{ b.trace=clamp(b.trace+v,0,b.maxTrace); if(v>0) maybeAlarm(b,op.nodeId); };
 
@@ -702,7 +770,7 @@ function finishOp(pid){
   uiRefresh();
   pushState();
 }
-function uiRefresh(){ if($('game').classList.contains('on')){ buildNodes(); buildSheet(); renderMeters(); } }
+function uiRefresh(){ if($('game').classList.contains('on')){ buildNodes(); buildSheet(); renderMeters(); } if(splitOn()) renderSplit(true); }
 
 function ownCore(pid,b){
   b.done=true; b.winner=pid;
@@ -722,9 +790,10 @@ function checkTrace(b){
     if(d.access>=1 && n.type!=='edge'){ if(!worst||d.access>b.dyn[worst].access) worst=n.id; } }
   if(worst){ b.dyn[worst].access=0; b.alarm[worst]=now()+900; }
   for(const pid in G.atk){ if(atkBoardOf(pid)===b && G.atk[pid].op && G.atk[pid].op.board===G.boards.indexOf(b)) G.atk[pid].op=null; }
-  const mine = atkBoardOf(G.me)===b;
-  if(mine) sfx.alarm();
-  addLog(mine?'sys':'def', mine?`⚠ INTRUSION DETECTED — you were kicked from ${worst||'the network'} (${b.kicks}/3)`:`defence repelled an intruder`);
+  const mine = atkBoardOf(G.me)===b && !G.local;
+  if(mine||G.local) sfx.alarm();
+  const victim = G.local ? (G.atk.host&&G.atk.host.atkBoard===G.boards.indexOf(b)?'P1':'P2') : null;
+  addLog(mine||G.local?'sys':'def', mine?`⚠ INTRUSION DETECTED — you were kicked from ${worst||'the network'} (${b.kicks}/3)`:victim?`⚠ ${victim} was detected and kicked from ${worst||'the network'}`:`defence repelled an intruder`);
   if(G.mode==='coop' && b.kicks>=3){ b.done=true; endMatch(null,'coop-fail'); }
   if((G.mode==='defend') && b.kicks>=3){ b.done=true; endMatch(G.defenderPid,'defended'); }
 }
@@ -754,7 +823,7 @@ function defDo(b,kind,nodeId,si,bySelf){
     case 'honeypot': d.honey=true; break;
   }
   const label=`${DEF[kind].label} ${n.name}`;
-  addLog(bySelf?'you':'def', (bySelf?'you ':'defence: ')+label.toLowerCase());
+  addLog(bySelf?'you':'def', (typeof bySelf==='string'?bySelf+' ':bySelf?'you ':'defence: ')+label.toLowerCase());
   if(bySelf) sfx.tap();
   pushState();
   return true;
@@ -823,6 +892,7 @@ function loop(){
       if(!anyOp && b.trace>0) b.trace=Math.max(0,b.trace-dt*1.2); } }
   }
   renderTick();
+  if(splitOn()) renderSplit(false);
   if(NET.mode!=='solo') NET.tick(dt);
   requestAnimationFrame(loop);
 }
@@ -849,6 +919,7 @@ function endMatch(winnerPid,reason){
     else { title='CORE OWNED';cls='win';big='You and your squadmate breached the core together.';sfx.win(); }
   } else if(G.mode==='duel'){
     if(!winnerPid){ title='DRAW';cls='';big='Time ran out with both sides even.'; }
+    else if(G.local){ const n=winnerPid==='host'?'PLAYER 1':'PLAYER 2'; title=n+' WINS';cls='win';big=`${n} rooted the rival core first.`; sfx.win(); }
     else { title=mine?'YOU WIN':'YOU LOSE';cls=mine?'win':'lose';big=mine?'You rooted your rival\'s core first.':'Your rival rooted your core first.'; mine?sfx.win():sfx.lose(); }
   } else if(G.mode==='defend'){
     const iAtk = G.role!=='def';
@@ -891,11 +962,14 @@ function restartSolo(){ if(lastSolo) startMatch(lastSolo.mode,lastSolo.opts); }
 /* =========================================================================
    RENDERING
    ========================================================================= */
-function showGame(){ $('menu').classList.remove('on'); $('game').classList.add('on'); layoutBoard(); }
+function showGame(){ $('menu').classList.remove('on');
+  if(G.view==='split'){ $('game').classList.remove('on'); $('split').classList.add('on'); SPL.sel={}; renderSplit(true);
+    if(window.RKFX&&RKFX.jack) RKFX.jack(G.local?'SPLIT SCREEN · SAME DEVICE':'SPLIT SCREEN · REMOTE','ESTABLISHING UPLINK',''); return; }
+  $('split').classList.remove('on'); $('game').classList.add('on'); layoutBoard(); }
 function toMenu(){
   G.running=false;
   if(NET.mode!=='solo'){ NET.leaveSquad(); }
-  $('game').classList.remove('on'); $('menu').classList.add('on'); $('endOv').classList.remove('on');
+  $('game').classList.remove('on'); $('split').classList.remove('on'); $('menu').classList.add('on'); $('endOv').classList.remove('on');
   buildMenu();
 }
 
@@ -1151,8 +1225,131 @@ function toast(msg){ const t=$('toast'); t.textContent=msg; t.classList.add('on'
 /* =========================================================================
    MENU
    ========================================================================= */
+/* =========================================================================
+   SPLIT SCREEN · each station shows the rival network (attack) and your own
+   (defend) at the same time. Local: two stations on one device. Remote: one
+   station per device, synced through the duel netcode.
+   ========================================================================= */
+const SPL={sel:{},sig:''};
+function splitOn(){ const e=$('split'); return !!e&&e.classList.contains('on'); }
+function splPids(){ return G.local?['host','guest']:[G.me]; }
+function splName(pid){ return G.local?(pid==='host'?'PLAYER 1':'PLAYER 2'):'YOUR STATION'; }
+function splNodes(pid,side){ const b=side==='atk'?atkBoardOf(pid):defBoardOf(pid);
+  return L(b).nodes.filter(n=>side==='def'||b.dyn[n.id].disc).sort((x,y)=>x.x-y.x||x.y-y.y); }
+function splSel(pid){ if(!SPL.sel[pid]) SPL.sel[pid]={side:'atk',node:splNodes(pid,'atk')[0].id}; return SPL.sel[pid]; }
+function splSide(pid,side){ const sel=splSel(pid); const list=splNodes(pid,side); if(!list.length) return;
+  SPL.sel[pid]={side,node:(sel.side===side?sel.node:list[0].id)}; sfx.sel(); renderSplit(true); }
+function splCycle(pid,dir){ const sel=splSel(pid); const list=splNodes(pid,sel.side); if(!list.length) return;
+  let i=list.findIndex(n=>n.id===sel.node); i=(i+dir+list.length)%list.length; SPL.sel[pid]={side:sel.side,node:list[i].id}; sfx.sel(); renderSplit(true); }
+const KEYS={host:{prev:['a'],next:['d'],atk:['w'],def:['s'],act:['1','2','3','4','5']},guest:{prev:['j'],next:['l'],atk:['i'],def:['k'],act:['6','7','8','9','0']}};
+function splKeys(){ return G.local?KEYS:{[G.me]:{prev:['a','arrowleft'],next:['d','arrowright'],atk:['w','arrowup'],def:['s','arrowdown'],act:['1','2','3','4','5','6']}}; }
+
+function splActions(pid){
+  const sel=splSel(pid), side=sel.side, b=side==='atk'?atkBoardOf(pid):defBoardOf(pid), n=node(b,sel.node), d=b.dyn[sel.node], acts=[];
+  if(side==='atk'){ const a=G.atk[pid], busy=!!a.op;
+    if(!d.scanned) acts.push(['op','scan',-1,'Scan',`+${OP.scan.trace}% trace`]);
+    if(d.scanned&&d.access<1) n.svc.forEach((s,i)=>{
+      if(s.kind==='vuln') acts.push(['op','exploit',i,'Exploit '+SVC[s.k].label,d.svc[i].patched?'patched':`+${OP.exploit.trace}% trace`]);
+      if(s.kind==='login') acts.push(['op','crack',i,'Crack '+SVC[s.k].label,(a.creds.has(b.owner+':*')?'creds! · ':'')+`+${OP.crack.trace}%`]); });
+    if(d.access===1) acts.push(['op','escalate',-1,n.core?'Escalate · take core':'Escalate',`+${OP.escalate.trace}% trace`]);
+    if(n.loot&&d.access>=2&&!d.looted) acts.push(['op','harvest',-1,'Harvest','steal creds / intel']);
+    if(b.trace>5) acts.push(['op','cover',-1,'Cover tracks',`${OP.cover.trace}% trace`]);
+    acts.forEach(x=>x.push(!busy&&!b.done&&canDo(pid,x[1],sel.node,x[2])));
+  } else {
+    n.svc.forEach((s,i)=>{ if(s.kind==='vuln') acts.push(['def','patch',i,'Patch '+SVC[s.k].label,`${DEF.patch.cost}⚡ remove flaw`,defCanDo(b,'patch',sel.node,i)]); });
+    for(const k of ['firewall','restore','honeypot']) acts.push(['def',k,-1,DEF[k].label,`${DEF[k].cost}⚡ ${DEF[k].desc}`,defCanDo(b,k,sel.node,-1)]);
+  }
+  return acts;
+}
+function splDo(pid,i){
+  if(!G.running) return; audio();
+  const x=splActions(pid)[i]; if(!x||!x[5]){ sfx.bad(); return; } const sel=splSel(pid);
+  if(x[0]==='op'){
+    if(NET.mode==='guest'){ NET.out('op',x[1],sel.node,x[2]); beginOp(pid,x[1],sel.node,x[2]); }
+    else if(!beginOp(pid,x[1],sel.node,x[2])){ sfx.bad(); return; }
+  } else { const b=defBoardOf(pid), bi=G.boards.indexOf(b);
+    if(NET.mode==='guest') NET.out('def',x[1],sel.node,x[2],bi);
+    defDo(b,x[1],sel.node,x[2],G.local?(pid==='host'?'P1':'P2'):true); }
+  if(NET.mode!=='solo') pushState(); renderSplit(true);
+}
+
+function miniMap(b,side,pid,selId){
+  let lk=''; const seen=new Set();
+  for(const n of L(b).nodes){ const d=b.dyn[n.id]; for(const l of n.links){ const k=[n.id,l].sort().join('-'); if(seen.has(k))continue; seen.add(k);
+    const m=node(b,l), dm=b.dyn[l], on=side==='def'||(d.disc&&dm.disc), hot=d.access>=1||dm.access>=1;
+    lk+=`<line x1="${n.x}" y1="${n.y}" x2="${m.x}" y2="${m.y}" class="${on?(hot?(side==='def'?'alarm':'hot'):'on'):'off'}" stroke-width="${hot?2:1.4}" vector-effect="non-scaling-stroke"${on?'':' stroke-dasharray="3 3"'}/>`; } }
+  let h='';
+  for(const n of L(b).nodes){ const d=b.dyn[n.id], show=side==='def'||d.disc, c=['node','mini'];
+    if(!show)c.push('undisc'); if(d.access===1)c.push(side==='def'?'breach':'foot'); if(d.access>=2)c.push(side==='def'?'breach':'root');
+    if(n.core)c.push('core'); if(selId===n.id)c.push('sel'); if(opOnNode(n.id,b))c.push('busy'); if(b.alarm[n.id]&&b.alarm[n.id]>now())c.push('alarm');
+    const state=side==='def'?(d.access>=2?'ROOTED':d.access?'BREACHED':opOnNode(n.id,b)?'UNDER ATTACK':''):(d.access>=2?'root':d.access?'user':d.scanned?'scanned':show?'exposed':'');
+    h+=`<div class="${c.join(' ')}" style="left:${n.x}%;top:${n.y}%" data-pid="${pid}" data-side="${side}" data-node="${n.id}"><div class="chip">${show?(TYPE_ICON[n.type]||'SRV'):'?'}<div class="ring"></div>${d.fw&&(side==='def'||d.scanned)?`<div class="fw">FW${d.fw}</div>`:''}${d.honey&&side==='def'?'<div class="hp">HP</div>':''}</div><div class="nm">${show?n.name:'• • •'}</div>${state?`<div class="st ${side}">${state}</div>`:''}</div>`; }
+  return `<div class="spl-map"><svg class="links" viewBox="0 0 100 100" preserveAspectRatio="none">${lk}</svg>${h}</div>`;
+}
+function splStation(pid){
+  const sel=splSel(pid), atkB=atkBoardOf(pid), defB=defBoardOf(pid), keys=splKeys()[pid];
+  const sb=sel.side==='atk'?atkB:defB, n=node(sb,sel.node), d=sb.dyn[sel.node];
+  const acts=splActions(pid); const kb=matchMedia('(pointer:fine)').matches;
+  const meter=(k,label,cls)=>`<div class="meter"><div class="ml"><span>${label}</span><b data-m="${k}">0</b></div><div class="bar ${cls}"><i data-m="${k}-bar"></i></div></div>`;
+  let info='';
+  if(sel.side==='atk'){ if(d.scanned) info=n.svc.map((s,i)=>`${SVC[s.k].label} :${SVC[s.k].port} — ${s.kind==='vuln'?(d.svc[i].patched?'<span class="pa">patched</span>':'<span class="vn">vulnerable</span>'):s.kind==='login'?'<span class="lk">needs login</span>':'ok'}`).join(' · ');
+    else info=reachable(sb,n.id)?'services unknown — scan it':'<span class="lk">out of reach — break into a linked machine first</span>'; }
+  else info=(d.access?`<span class="vn">${d.access>=2?'ROOTED by your rival':'BREACHED — restore it'}</span> · `:'')+n.svc.map((s,i)=>`${SVC[s.k].label}${s.kind==='vuln'?(d.svc[i].patched?' <span class="pa">patched</span>':' <span class="vn">vulnerable</span>'):''}`).join(' · ')+(d.fw?` · firewall ${d.fw}`:'');
+  const opA=opOnNode(sel.node,sb);
+  return `<div class="station${G.local?'':' solo'}" data-pid="${pid}">
+    <div class="st-head"><b class="st-name">${splName(pid)}</b>
+      <div class="st-meters">${meter('trace','TRACE','trace')}${meter('breach','YOUR BREACH','prog')}${meter('energy','DEF ENERGY','prog energy')}${meter('threat','RIVAL BREACH','threat')}</div></div>
+    <div class="st-maps">
+      <div class="st-pane atk${sel.side==='atk'?' cur':''}"><button class="pane-h" type="button" data-sw="atk" data-pid="${pid}">ATTACK · RIVAL NETWORK${kb&&keys?` <i class="kb">${keys.atk[0].toUpperCase()}</i>`:''}</button>${miniMap(atkB,'atk',pid,sel.side==='atk'?sel.node:null)}</div>
+      <div class="st-pane def${sel.side==='def'?' cur':''}"><button class="pane-h" type="button" data-sw="def" data-pid="${pid}">DEFEND · YOUR NETWORK${kb&&keys?` <i class="kb">${keys.def[0].toUpperCase()}</i>`:''}</button>${miniMap(defB,'def',pid,sel.side==='def'?sel.node:null)}</div>
+    </div>
+    <div class="st-sheet ${sel.side}">
+      <div class="st-sel"><span class="st-tag">${sel.side==='atk'?'TARGET':'YOUR NODE'}</span><b>${n.name}</b>${n.core?' <span class="lk">★ core</span>':''}${kb&&keys?`<span class="st-keys">${keys.prev[0].toUpperCase()}/${keys.next[0].toUpperCase()} select</span>`:''}</div>
+      <div class="st-info">${info}${opA&&sel.side==='atk'?` · <span class="lk">${OP[opA.op.kind].verb}… <span data-m="op">0</span>%</span>`:''}${opA&&sel.side==='def'?` · <span class="vn">rival is ${OP[opA.op.kind].verb} this node</span>`:''}</div>
+      <div class="st-acts">${acts.length?acts.map((x,i)=>`<button type="button" class="act${x[0]==='def'?' def':''}" data-pid="${pid}" data-a="${i}" ${x[5]?'':'disabled'}>${kb&&keys&&keys.act[i]?`<i class="kb">${keys.act[i]}</i>`:''}<b>${x[3]}</b><span>${x[4]}</span></button>`).join(''):'<div class="hint-empty">nothing to do here</div>'}</div>
+    </div></div>`;
+}
+function renderSplit(force){
+  if(!splitOn()||!G.boards.length||!G.atk[splPids()[0]]) return;
+  const pids=splPids();
+  const c=$('splClock'); const tl=Math.ceil(G.timeLeft); c.textContent=G.timeLeft>0?fmtTime(tl):'--:--'; c.className='clock mono '+(tl<=20?'bad':tl<=60?'warn':'');
+  let sig=pids.join()+'|'+G.log.length+'|'+G.running+'|';
+  for(const b of G.boards){ for(const n of L(b).nodes){ const d=b.dyn[n.id]; sig+=(d.disc?1:0)+''+(d.scanned?1:0)+d.access+d.fw+(d.honey?1:0)+(d.looted?1:0)+d.svc.map(x=>x.patched?1:0).join('')+(b.alarm[n.id]>now()?'!':'')+'.'; }
+    sig+=Math.floor(b.defOps)+(b.trace>5?'t':'')+(b.done?'d':'')+';'; }
+  for(const pid in G.atk){ const a=G.atk[pid]; sig+=pid+(a.op?a.op.kind+a.op.nodeId+a.op.board:'-')+a.creds.size; }
+  for(const pid of pids) sig+=JSON.stringify(splSel(pid));
+  const body=$('splBody');
+  if(force||sig!==SPL.sig){ SPL.sig=sig; body.className='spl-body '+(pids.length>1?'two':'one');
+    body.innerHTML=pids.map(splStation).join('')+`<div class="spl-feed">${G.log.slice(-4).reverse().map(l=>`<div class="ln ${l.kind}">${escapeHtml(l.msg)}</div>`).join('')}</div>`; }
+  for(const pid of pids){ const st=body.querySelector(`.station[data-pid="${pid}"]`); if(!st) continue;
+    const ab=atkBoardOf(pid), db=defBoardOf(pid);
+    const set=(k,v,txt)=>{ const t=st.querySelector(`[data-m="${k}"]`), br=st.querySelector(`[data-m="${k}-bar"]`); if(t) t.textContent=txt; if(br) br.style.width=Math.max(0,Math.min(100,v))+'%'; };
+    set('trace',ab.trace,Math.round(ab.trace)+'%'); set('breach',progressPct(ab),progressPct(ab)+'%');
+    set('energy',db.defOps/db.defMax*100,Math.floor(db.defOps)+'⚡'); set('threat',progressPct(db),progressPct(db)+'%');
+    const a=G.atk[pid], op=st.querySelector('[data-m="op"]'); if(op&&a.op) op.textContent=Math.round(a.op.t/a.op.dur*100); }
+}
+$('splBody').addEventListener('click',e=>{
+  const nd=e.target.closest('.node.mini'); if(nd){ const pid=nd.dataset.pid; if(!splPids().includes(pid)) return;
+    const b=nd.dataset.side==='atk'?atkBoardOf(pid):defBoardOf(pid); if(nd.dataset.side==='atk'&&!b.dyn[nd.dataset.node].disc){ sfx.bad(); return; }
+    audio(); SPL.sel[pid]={side:nd.dataset.side,node:nd.dataset.node}; sfx.sel(); renderSplit(true); return; }
+  const sw=e.target.closest('[data-sw]'); if(sw){ audio(); splSide(sw.dataset.pid,sw.dataset.sw); return; }
+  const ab=e.target.closest('[data-a]'); if(ab) splDo(ab.dataset.pid,+ab.dataset.a);
+});
+document.addEventListener('keydown',e=>{
+  if(!splitOn()||!G.running||e.ctrlKey||e.metaKey||e.altKey) return; if(e.target.closest&&e.target.closest('input,textarea')) return;
+  const k=e.key.toLowerCase(), map=splKeys();
+  for(const pid in map){ const m=map[pid]; let hit=true;
+    if(m.prev.includes(k)) splCycle(pid,-1); else if(m.next.includes(k)) splCycle(pid,1);
+    else if(m.atk.includes(k)) splSide(pid,'atk'); else if(m.def.includes(k)) splSide(pid,'def');
+    else if(m.act.includes(k)) splDo(pid,m.act.indexOf(k)); else hit=false;
+    if(hit){ e.preventDefault(); audio(); return; } }
+});
+$('splBack').onclick=()=>toMenu();
+$('splHelp').onclick=openHelp;
+
 const SOLO=[
   {mode:'sandbox',cls:'hot',ic:'SBX',t:'Sandbox',pl:'1 player · no pressure',d:'Free play on a real network with no defender and no clock. The best place to learn what every button does.',opts:{level:'office'}},
+  {mode:'split-local',cls:'co',ic:'2P',t:'Split Screen',pl:'2 players · one device',d:'Two hackers, one screen. Each of you attacks the other’s server while defending your own. Tap, or use the keyboard.'},
   {mode:'ai',cls:'hot',ic:'AI',t:'vs. AI Defender',pl:'1 player · timed',d:'An AI watches the network and patches, firewalls and restores as you push toward the core. Beat the clock.',chooseLevel:true,chooseDiff:true},
 ];
 function buildMenu(){
@@ -1162,6 +1359,7 @@ function buildMenu(){
     el.innerHTML=`<div class="mt"><span class="ic">${m.ic}</span>${m.t}</div><div class="pl">${m.pl}</div><p>${m.d}</p>`;
     el.onclick=()=>{ audio(); sfx.tap();
       if(m.mode==='sandbox'){ lastSolo={mode:'sandbox',opts:m.opts}; startMatch('sandbox',m.opts); }
+      else if(m.mode==='split-local'){ const o={time:300,view:'split',local:true}; lastSolo={mode:'duel',opts:o}; startMatch('duel',o); }
       else soloConfig(m); };
     sm.appendChild(el);
   });
@@ -1278,6 +1476,7 @@ function hostStart(mode){
   let opts={};
   if(mode==='coop'){ opts={level:'bank',difficulty:2}; startMatch('coop',opts); }
   else if(mode==='duel'){ opts={time:300}; startMatch('duel',opts); }
+  else if(mode==='split'){ opts={time:300,view:'split'}; startMatch('duel',opts); }
   else if(mode==='defend'){ const iAtk=NET.adRole!=='def'; opts={level:'office',atkPid:iAtk?'host':'guest',time:360}; G.role=iAtk?'atk':'def'; startMatch('defend',opts); }
   pushState();
 }
@@ -1292,10 +1491,10 @@ function encodeState(){
   for(const pid in G.atk){ const a=G.atk[pid]; atk[pid]={creds:[...a.creds],intel:a.intel,kicks:a.kicks,
     op:a.op?[a.op.kind,a.op.nodeId,a.op.si,Math.round(a.op.t*100),Math.round(a.op.dur*100),a.op.board]:null,
     homeBoard:a.homeBoard,atkBoard:a.atkBoard}; }
-  return {mode:G.mode,boards,atk,time:Math.round(G.timeLeft),run:NET.run,defenderPid:G.defenderPid||null,role:G.role||'atk'};
+  return {mode:G.mode,view:G.view||'board',boards,atk,time:Math.round(G.timeLeft),run:NET.run,defenderPid:G.defenderPid||null,role:G.role||'atk'};
 }
 function applyHostState(pp){
-  const s=pp.state; if(!s) return;
+  const s=pp.state; if(!s||!s.mode||!Array.isArray(s.boards)||!s.boards.length) return; // host is still in the lobby
   const freshRun = s.run!==NET.run;
   if(!G.mode || freshRun || G.mode!==s.mode){
     // (re)build match structure to mirror host
@@ -1322,11 +1521,12 @@ function applyHostState(pp){
   // detect end
   const done=G.boards.some(b=>b.done);
   if(done && G.running){ G.running=false; const w=G.boards.map(b=>b.winner).find(x=>x); endMatch(w|| (s.mode==='coop'&&G.boards[0].kicks>=3?null:w), 'net'); }
-  if(!$('game').classList.contains('on') && s.mode && pp.inGame){ showGame(); }
+  if(!$('game').classList.contains('on') && !splitOn() && s.mode && pp.inGame){ showGame(); }
+  if(splitOn()) renderSplit(false);
   if($('game').classList.contains('on')){ if(!G.selNode){ const b=atkBoardOf(G.me); if(b){const e=L(b).nodes.find(n=>n.type==='edge'); if(e)G.selNode=e.id;} } layoutBoard(); }
 }
 function buildGuestMatch(s){
-  G.mode=s.mode; G.me='guest'; G.boards=[]; G.atk={}; G.selNode=null; G.log=G.log||[]; G.running=true; G.t0=now();
+  G.mode=s.mode; G.view=s.view||'board'; G.local=false; G.me='guest'; G.boards=[]; G.atk={}; G.selNode=null; G.log=G.log||[]; G.running=true; G.t0=now();
   s.boards.forEach(bs=>{ const b=makeBoard(bs.lvl,bs.owner); b.defKind=bs.defKind; G.boards.push(b); });
   for(const pid in s.atk){ const as=s.atk[pid]; G.atk[pid]={creds:new Set(as.creds),intel:as.intel,op:null,homeBoard:as.homeBoard,atkBoard:as.atkBoard,kicks:as.kicks}; }
   G.defenderPid=s.defenderPid; G.role = s.mode==='defend'? (G.me===s.defenderPid?'def':'atk') : 'atk';
@@ -1342,7 +1542,7 @@ function handleNetEvent(ev){
   if(NET.mode==='host'){
     if(kind==='op'){ const k=ev[2],nodeId=ev[3],si=ev[4]; beginOp('guest',k,nodeId,si); pushState(); }
     else if(kind==='def'){ const k=ev[2],nodeId=ev[3],si=ev[4],bi=ev[5];
-      const b=G.boards[bi]; if(b) defDo(b,k,nodeId,si,false); pushState(); }
+      const b=G.boards[bi]; if(b) defDo(b,k,nodeId,si,G.mode==='duel'?'rival':false); pushState(); }
   }
 }
 
@@ -1365,6 +1565,7 @@ function renderCoop(){
         ${mcard('co','CO','Co-op','2 players vs AI','Breach one hardened server together — split the branches and watch each other\'s trace.')}
         ${mcard('ad','A/D','Attack & Defend','1 attacks · 1 defends','One of you breaks in while the other patches holes and firewalls the path.')}
         ${mcard('vs','1V1','Duel (1v1)','race to root','You each get an identical network. First to root the rival\'s core wins.')}
+        ${mcard('hot','SPL','Split Screen','attack + defend at once','Hack your rival’s server and defend your own at the same time, both on screen. Works across two devices.','split')}
       </div>
       <div class="sub" style="margin:14px 0 6px">JOIN A ROOM</div>
       <div class="field"><input id="joinInp" maxlength="4" placeholder="CODE" autocomplete="off" inputmode="latin"></div>
@@ -1394,8 +1595,8 @@ function renderCoop(){
   const sb=$('startBtn'); if(sb) sb.onclick=()=>{ audio(); hostStart(NET.wantMode); };
   const lb=$('leaveBtn'); if(lb) lb.onclick=()=>NET.leaveSquad();
 }
-function mcard(cls,ic,t,pl,d){ return `<button class="mode ${cls}" data-host="${cls==='co'?'coop':cls==='ad'?'defend':'duel'}"><div class="mt"><span class="ic">${ic}</span>${t}</div><div class="pl">${pl}</div><p>${d}</p></button>`; }
-function gmName(m){ return {coop:'Co-op',defend:'Attack & Defend',duel:'Duel (1v1)'}[m]||'match'; }
+function mcard(cls,ic,t,pl,d,host){ return `<button class="mode ${cls}" data-host="${host||(cls==='co'?'coop':cls==='ad'?'defend':'duel')}"><div class="mt"><span class="ic">${ic}</span>${t}</div><div class="pl">${pl}</div><p>${d}</p></button>`; }
+function gmName(m){ return {coop:'Co-op',defend:'Attack & Defend',duel:'Duel (1v1)',split:'Split Screen'}[m]||'match'; }
 
 /* =========================================================================
    PRIMER + HELP
@@ -3090,7 +3291,7 @@ new MutationObserver(()=>brains.gBrain&&brains.gBrain.pulse(.35)).observe($('fee
 
 // rare full-screen glitch hit
 new MutationObserver(refresh).observe($('trkOv'),{attributes:true,attributeFilter:['class']});
-window.RKFX={refresh};
+window.RKFX={refresh,jack:jackIn};
 if(!reduce){ (function tick(){ setTimeout(()=>{ const a=$('app'); if(fxOn()) a.classList.add('hit'); setTimeout(()=>a.classList.remove('hit'),180); tick(); },9000+Math.random()*9000); })(); }
 })();
 </script>
