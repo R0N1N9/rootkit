@@ -31,7 +31,20 @@ html[data-fx="off"] #app.hit{animation:none!important}
 /* split screen */
 #split{flex-direction:column;background:var(--bg)}
 .spl-body{flex:1;min-height:0;display:flex;position:relative}
-.spl-body.two{flex-direction:row}
+.spl-body.two{flex-direction:column}
+.spl-body.two .station{border-right:0}
+.spl-body.two .station[data-pid="guest"]{transform:rotate(180deg)}
+.spl-body.two .spl-feed{display:none}
+#split.face>.topbar{display:none}
+.spl-mid{flex:none;display:flex;flex-direction:column;background:var(--panel2);border-top:2px solid var(--frame);border-bottom:2px solid var(--frame)}
+.mid-row{display:flex;align-items:center;gap:10px;padding:4px 10px}
+.mid-row.p2{transform:rotate(180deg);border-bottom:1px solid var(--line)}
+.mid-row .iconbtn{width:30px;height:30px}
+.mid-row .who{font-family:var(--mono);font-size:11px;letter-spacing:1.5px;color:var(--acc);flex:none}
+.mid-row.p2 .who{color:var(--acc2)}
+.mid-row .last{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-family:var(--mono);font-size:11px;color:var(--dim)}
+.mid-row .clk{font-family:var(--mono);font-weight:700;font-size:16px;color:var(--acc);flex:none}
+.mid-row .clk.warn{color:var(--warn)} .mid-row .clk.bad{color:var(--bad)}
 .station{flex:1;min-width:0;min-height:0;display:flex;flex-direction:column;border-right:1px solid var(--line)}
 .station:last-of-type{border-right:0}
 .st-head{display:flex;gap:10px;align-items:center;padding:7px 10px;border-bottom:1px solid var(--line);background:var(--panel)}
@@ -78,11 +91,14 @@ html[data-fx="off"] #app.hit{animation:none!important}
   .station.solo .st-maps{flex-direction:column;flex:none} .station.solo .st-pane{border-right:0;border-bottom:1px solid var(--line);min-height:210px}
   .st-meters{grid-template-columns:repeat(2,minmax(0,1fr));gap:4px 8px}
 }
-@media (orientation:portrait){
-  .spl-body.two{flex-direction:column}
-  .spl-body.two .station{border-right:0;border-bottom:1px solid var(--line)}
-  .spl-body.two .station[data-pid="guest"]{transform:rotate(180deg)}
-  .spl-body.two .spl-feed{display:none}
+.spl-body.two .st-maps{min-height:96px}
+.spl-body.two .st-meters{grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+@media (max-height:760px){
+  .spl-body.two .st-head{padding:4px 8px;gap:6px} .spl-body.two .st-name{font-size:10px} .spl-body.two .st-meters .ml{font-size:8px;margin-bottom:2px}
+  .spl-body.two .st-info{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin:2px 0 4px}
+  .spl-body.two .st-sheet{padding:5px 8px} .spl-body.two .st-acts{gap:4px} .spl-body.two .st-acts .act{padding:6px 8px} .spl-body.two .st-acts .act span{display:none}
+  .spl-body.two .spl-map{inset:22px 6px 8px} .spl-body.two .spl-map .node .nm{font-size:9px} .spl-body.two .spl-map .node .st{display:none}
+  .spl-body.two .mid-row{padding:2px 8px} .spl-body.two .mid-row .iconbtn{width:26px;height:26px}
 }
 /* settings */
 .menubar{display:flex;justify-content:flex-end;margin-bottom:10px}
@@ -1320,7 +1336,12 @@ function renderSplit(force){
   for(const pid of pids) sig+=JSON.stringify(splSel(pid));
   const body=$('splBody');
   if(force||sig!==SPL.sig){ SPL.sig=sig; body.className='spl-body '+(pids.length>1?'two':'one');
-    body.innerHTML=pids.map(splStation).join('')+`<div class="spl-feed">${G.log.slice(-4).reverse().map(l=>`<div class="ln ${l.kind}">${escapeHtml(l.msg)}</div>`).join('')}</div>`; }
+    $('split').classList.toggle('face',G.local);
+    if(G.local){ const last=G.log.length?escapeHtml(G.log[G.log.length-1].msg):'Root the rival core · protect yours';
+      const row=who=>`<div class="mid-row ${who}"><button type="button" class="iconbtn" data-mid="leave" title="Leave">‹</button><b class="who">${who==='p1'?'PLAYER 1':'PLAYER 2'}</b><span class="last">${last}</span><span class="clk" data-clk>--:--</span></div>`;
+      body.innerHTML=splStation('guest')+`<div class="spl-mid">${row('p2')}${row('p1')}</div>`+splStation('host'); }
+    else body.innerHTML=pids.map(splStation).join('')+`<div class="spl-feed">${G.log.slice(-4).reverse().map(l=>`<div class="ln ${l.kind}">${escapeHtml(l.msg)}</div>`).join('')}</div>`; }
+  body.querySelectorAll('[data-clk]').forEach(el=>{ el.textContent=c.textContent; el.className='clk '+(tl<=20?'bad':tl<=60?'warn':''); });
   for(const pid of pids){ const st=body.querySelector(`.station[data-pid="${pid}"]`); if(!st) continue;
     const ab=atkBoardOf(pid), db=defBoardOf(pid);
     const set=(k,v,txt)=>{ const t=st.querySelector(`[data-m="${k}"]`), br=st.querySelector(`[data-m="${k}-bar"]`); if(t) t.textContent=txt; if(br) br.style.width=Math.max(0,Math.min(100,v))+'%'; };
@@ -1332,6 +1353,7 @@ $('splBody').addEventListener('click',e=>{
   const nd=e.target.closest('.node.mini'); if(nd){ const pid=nd.dataset.pid; if(!splPids().includes(pid)) return;
     const b=nd.dataset.side==='atk'?atkBoardOf(pid):defBoardOf(pid); if(nd.dataset.side==='atk'&&!b.dyn[nd.dataset.node].disc){ sfx.bad(); return; }
     audio(); SPL.sel[pid]={side:nd.dataset.side,node:nd.dataset.node}; sfx.sel(); renderSplit(true); return; }
+  const mb=e.target.closest('[data-mid]'); if(mb){ toMenu(); return; }
   const sw=e.target.closest('[data-sw]'); if(sw){ audio(); splSide(sw.dataset.pid,sw.dataset.sw); return; }
   const ab=e.target.closest('[data-a]'); if(ab) splDo(ab.dataset.pid,+ab.dataset.a);
 });
